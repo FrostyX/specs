@@ -1,9 +1,9 @@
 %global pypi_name qtile
-%global pypi_version 0.21.0
+%global pypi_version 0.22.1
 
 Name: %{pypi_name}
 Version: %{pypi_version}
-Release: 2%{?dist}
+Release: 1%{?dist}
 Summary: A pure-Python tiling window manager
 Source0: %{pypi_source}
 License: MIT and GPLv3+
@@ -89,6 +89,9 @@ install -m 644 resources/qtile-wayland.desktop %{buildroot}%{_datadir}/wayland-s
 
 
 %changelog
+* Thu Sep 22 2022 Jakub Kadlcik <frostyx@email.cz> - 0.22.1-1
+- Upgrade to the new upstream version
+
 * Tue Jun 14 2022 Jakub Kadlcik <frostyx@email.cz> - 0.21.0-2
 - Install Qtile session file from upstream
 - Install Qtile Wayland session file
