@@ -1,15 +1,11 @@
-%global commit f3ea5b91f6c29b91b1e7860f9bf6d39e7751b602
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-%global snapshot 20220105%{shortcommit}
-
 Name: qtile-extras
-Version: 0^%{snapshot}
+Version: 0.22.1
 Release: 1%{?dist}
 Summary: A collection of mods for Qtile.
 
 License: MIT
 URL: https://github.com/elParaguayo/qtile-extras
-Source0: %{URL}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0: %{URL}/archive/v%{version}/%{name}-%{version}.tar.gz
 
 BuildArch: noarch
 
@@ -17,11 +13,18 @@ BuildRequires: python3-devel
 BuildRequires: python3-setuptools
 BuildRequires: python3-pytest
 BuildRequires: python3-requests
-BuildRequires: qtile >= 0.19.0
+BuildRequires: python3-pip
+BuildRequires: python3-wheel
+BuildRequires: qtile = %{version}
 BuildRequires: pango-devel
 BuildRequires: gdk-pixbuf2-devel
+BuildRequires: /usr/bin/pathfix.py
 
-Requires: qtile >= 0.19.0
+# The tarball is missing .git directory, we need to create it during build
+BuildRequires: git
+
+
+Requires: qtile = %{version}
 
 
 %description
@@ -33,7 +36,10 @@ https://qtile-extras.readthedocs.io/
 
 
 %prep
-%autosetup -n %{name}-%{commit}
+%autosetup -n %{name}-%{version}
+git init
+
+pathfix.py -pni "%{__python3} %{py3_shbang_opts}" .
 
 # The stravalib isn't packaged for Fedora yet
 # https://pypi.org/project/stravalib/
@@ -48,26 +54,24 @@ rm -rf test/widget/test_network.py
 
 
 %build
-%py3_build
-
-
-%check
-%{python3} setup.py test
+%pyproject_wheel
 
 
 %install
-%py3_install
+%pyproject_install
+%pyproject_save_files qtile_extras
 
 rm -rf %{buildroot}%{python3_sitelib}/test
 
 
-%files
+%files -n qtile-extras -f %{pyproject_files}
 %license LICENSE
 %doc README.md
-%{python3_sitelib}/qtile_extras
-%{python3_sitelib}/qtile_extras-*.egg-info
 
 
 %changelog
+* Thu Sep 22 2022 Jakub Kadlcik <frostyx@email.cz> - 0.22.1-1
+- Upgrade to the new upstream version
+
 * Wed Jan 05 2022 Jakub Kadlcik <frostyx@email.cz>
 - Initial package
