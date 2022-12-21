@@ -1,15 +1,27 @@
+%bcond_with wayland
+
 %global pypi_name qtile
 %global pypi_version 0.22.1
 
 Name: %{pypi_name}
 Version: %{pypi_version}
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A pure-Python tiling window manager
 Source0: %{pypi_source}
-License: MIT and GPLv3+
-# All MIT except for:
-# libqtile/widget/pacman.py:GPL (v3 or later)
+
+# We need this for running tests
+Source1: https://raw.githubusercontent.com/qtile/qtile/v%{pypi_version}/bin/qtile
+
+# Everything licensed under MIT except for the following files.
+# GPL-3.0-or-later:
+#   libqtile/widget/cmus.py
+#   libqtile/widget/moc.py
+License: MIT AND GPL-3.0-or-later
+
+%if %{without wayland}
 BuildArch: noarch
+%endif
+
 Url: http://qtile.org
 
 BuildRequires:  python3-devel
@@ -22,6 +34,29 @@ BuildRequires:  python3-six
 BuildRequires:  python3-pycparser
 BuildRequires:  python3-setuptools_scm
 BuildRequires:  python3-dbus-next
+
+# Test dependencies
+BuildRequires:  gcc
+BuildRequires:  xorg-x11-server-Xvfb
+BuildRequires:  xorg-x11-server-Xephyr
+BuildRequires:  pango-devel
+BuildRequires:  gdk-pixbuf2-devel
+BuildRequires:  librsvg2-devel
+BuildRequires:  libxkbcommon-devel
+BuildRequires:  wlroots-devel
+BuildRequires:  gtk3-devel
+BuildRequires:  python3-pytest
+BuildRequires:  python3-bowler
+BuildRequires:  python3-gobject
+%if %{with wayland}
+# These packages are not in Fedora yet, however they are packaged in Copr
+# https://copr.fedorainfracloud.org/coprs/frostyx/qtile/
+# So let's temporarily build the official Fedora package without Wayland support
+# but build the Copr package with Wayland support.
+BuildRequires:  python3-pywlroots
+BuildRequires:  python3-pywayland
+BuildRequires:  python3-xkbcommon
+%endif
 
 Requires:  python3-cairocffi
 Requires:  python3-cffi
@@ -38,15 +73,14 @@ Recommends: python3-xmltodict
 Recommends: python3-dateutil
 Recommends: python3-mpd2
 
+%if %{with wayland}
 # Wayland-specific dependencies
-%if 0%{?fedora} >= 36
 Recommends: python3-pywayland
 Recommends: python3-pywlroots
 %endif
 
 
-%description
-
+%global _description %{expand:
 A pure-Python tiling window manager.
 
 Features
@@ -60,35 +94,62 @@ Features
     * Complete remote scriptability - write scripts to set up workspaces,
       manipulate windows, update status bar widgets and more.
     * Qtile's remote scriptability makes it one of the most thoroughly
-      unit-tested window mangers around.
+      unit-tested window mangers around.}
+
+%description %_description
 
 
 %prep
-%setup -q -n qtile-%{version}
+%autosetup -p 1
+mkdir bin
+cp -ar %{SOURCE1} bin/
+chmod +x bin/qtile
+
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+%pyproject_save_files libqtile
+
 mkdir -p %{buildroot}%{_datadir}/xsessions/
 install -m 644 resources/qtile.desktop %{buildroot}%{_datadir}/xsessions/
 
+%if %{with wayland}
 mkdir -p %{buildroot}%{_datadir}/wayland-sessions/
 install -m 644 resources/qtile-wayland.desktop %{buildroot}%{_datadir}/wayland-sessions/
+%endif
 
 
-%files
+%check
+./scripts/ffibuild
+%pytest test
+
+
+%files -n qtile -f %{pyproject_files}
 %license LICENSE
 %doc README.rst
 %{_bindir}/qtile
-%{python3_sitelib}/qtile-%{version}-py%{python3_version}.egg-info
-%{python3_sitelib}/libqtile
 %{_datadir}/xsessions/qtile.desktop
+%if %{with wayland}
 %{_datadir}/wayland-sessions/qtile-wayland.desktop
+%endif
 
 
 %changelog
+* Tue Dec 20 2022 Jakub Kadlcik <frostyx@email.cz> - 0.22.1-2
+- Use autosetup macro
+- SPDX license expression and changed license docstring
+- Add check section and run tests
+- Use 2021+ python package format
+- Add bcond for wayland, not all dependencies are in Fedora yet
+
 * Thu Sep 22 2022 Jakub Kadlcik <frostyx@email.cz> - 0.22.1-1
 - Upgrade to the new upstream version
 
