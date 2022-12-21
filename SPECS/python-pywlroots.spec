@@ -1,5 +1,5 @@
 Name:           python-pywlroots
-Version:        0.15.17
+Version:        0.15.24
 Release:        1%{?dist}
 Summary:        Python binding to the wlroots library using cffi
 
@@ -66,5 +66,8 @@ python3 -m build --wheel --no-isolation
 
 
 %changelog
+* Tue Dec 20 2022 Jakub Kadlcik <frostyx@email.cz> - 0.15.24-1
+- New upstream version
+
 * Tue Jun 14 2022 Jakub Kadlcik <frostyx@email.cz> - 0.15.17-1
 - Initial package
