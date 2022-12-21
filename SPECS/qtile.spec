@@ -5,7 +5,7 @@
 
 Name: %{pypi_name}
 Version: %{pypi_version}
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: A pure-Python tiling window manager
 Source0: %{pypi_source}
 
@@ -34,6 +34,7 @@ BuildRequires:  python3-six
 BuildRequires:  python3-pycparser
 BuildRequires:  python3-setuptools_scm
 BuildRequires:  python3-dbus-next
+BuildRequires:  desktop-file-utils
 
 # Test dependencies
 BuildRequires:  gcc
@@ -128,6 +129,11 @@ install -m 644 resources/qtile-wayland.desktop %{buildroot}%{_datadir}/wayland-s
 
 
 %check
+desktop-file-validate %{buildroot}%{_datadir}/xsessions/%{name}.desktop
+%if %{with wayland}
+desktop-file-validate %{buildroot}%{_datadir}/wayland-sessions/%{name}-wayland.desktop
+%endif
+
 ./scripts/ffibuild
 %pytest test
 
@@ -143,6 +149,9 @@ install -m 644 resources/qtile-wayland.desktop %{buildroot}%{_datadir}/wayland-s
 
 
 %changelog
+* Wed Dec 21 2022 Jakub Kadlcik <frostyx@email.cz> - 0.22.1-3
+- Run desktop-file-validate in the check section
+
 * Tue Dec 20 2022 Jakub Kadlcik <frostyx@email.cz> - 0.22.1-2
 - Use autosetup macro
 - SPDX license expression and changed license docstring
