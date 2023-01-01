@@ -1,16 +1,10 @@
 %bcond_with wayland
 
-%global pypi_name qtile
-%global pypi_version 0.22.1
-
-Name: %{pypi_name}
-Version: %{pypi_version}
-Release: 3%{?dist}
+Name: qtile
+Version: 0.22.1
+Release: 4%{?dist}
 Summary: A pure-Python tiling window manager
-Source0: %{pypi_source}
-
-# We need this for running tests
-Source1: https://raw.githubusercontent.com/qtile/qtile/v%{pypi_version}/bin/qtile
+Source: https://github.com/qtile/qtile/archive/v%{version}/qtile-%{version}.tar.gz
 
 # Everything licensed under MIT except for the following files.
 # GPL-3.0-or-later:
@@ -49,15 +43,32 @@ BuildRequires:  gtk3-devel
 BuildRequires:  python3-pytest
 BuildRequires:  python3-bowler
 BuildRequires:  python3-gobject
-%if %{with wayland}
-# These packages are not in Fedora yet, however they are packaged in Copr
-# https://copr.fedorainfracloud.org/coprs/frostyx/qtile/
-# So let's temporarily build the official Fedora package without Wayland support
-# but build the Copr package with Wayland support.
-BuildRequires:  python3-pywlroots
-BuildRequires:  python3-pywayland
-BuildRequires:  python3-xkbcommon
+
+# Some dependencies are loaded with ffi.dlopen, and to declare them properly
+# we'll need this suffix.
+%if 0%{?__isa_bits} == 32
+%global libsymbolsuffix %{nil}
+%else
+%global libsymbolsuffix ()(%{__isa_bits}bit)
 %endif
+
+BuildRequires:  pango-devel
+BuildRequires: libgobject-2.0.so.0%{libsymbolsuffix}
+BuildRequires: libpango-1.0.so.0%{libsymbolsuffix}
+BuildRequires: libpangocairo-1.0.so.0%{libsymbolsuffix}
+Requires: libgobject-2.0.so.0%{libsymbolsuffix}
+Requires: libpango-1.0.so.0%{libsymbolsuffix}
+Requires: libpangocairo-1.0.so.0%{libsymbolsuffix}
+
+# missing from python3-cairocffi
+BuildRequires: libgdk_pixbuf-2.0.so.0%{libsymbolsuffix}
+BuildRequires: libglib-2.0.so.0%{libsymbolsuffix}
+BuildRequires: libgdk-3.so.0%{libsymbolsuffix}
+
+# missing from python3-cairocffi
+Requires: libgdk_pixbuf-2.0.so.0%{libsymbolsuffix}
+Requires: libglib-2.0.so.0%{libsymbolsuffix}
+Requires: libgdk-3.so.0%{libsymbolsuffix}
 
 Requires:  python3-cairocffi
 Requires:  python3-cffi
@@ -81,7 +92,7 @@ Recommends: python3-pywlroots
 %endif
 
 
-%global _description %{expand:
+%description
 A pure-Python tiling window manager.
 
 Features
@@ -95,23 +106,19 @@ Features
     * Complete remote scriptability - write scripts to set up workspaces,
       manipulate windows, update status bar widgets and more.
     * Qtile's remote scriptability makes it one of the most thoroughly
-      unit-tested window mangers around.}
-
-%description %_description
+      unit-tested window mangers around.
 
 
 %prep
 %autosetup -p 1
-mkdir bin
-cp -ar %{SOURCE1} bin/
-chmod +x bin/qtile
-
-
 %generate_buildrequires
-%pyproject_buildrequires
+export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
+%pyproject_buildrequires %{?with_wayland:-x wayland}
+%pyproject_buildrequires -x test
 
 
 %build
+export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_wheel
 
 
@@ -120,26 +127,24 @@ chmod +x bin/qtile
 %pyproject_save_files libqtile
 
 mkdir -p %{buildroot}%{_datadir}/xsessions/
-install -m 644 resources/qtile.desktop %{buildroot}%{_datadir}/xsessions/
+desktop-file-install \
+    --dir %{buildroot}%{_datadir}/xsessions/ \
+    resources/qtile.desktop
 
 %if %{with wayland}
 mkdir -p %{buildroot}%{_datadir}/wayland-sessions/
-install -m 644 resources/qtile-wayland.desktop %{buildroot}%{_datadir}/wayland-sessions/
+desktop-file-install \
+    --dir %{buildroot}%{_datadir}/wayland-sessions/ \
+    resources/qtile-wayland.desktop
 %endif
 
 
 %check
-desktop-file-validate %{buildroot}%{_datadir}/xsessions/%{name}.desktop
-%if %{with wayland}
-desktop-file-validate %{buildroot}%{_datadir}/wayland-sessions/%{name}-wayland.desktop
-%endif
-
 ./scripts/ffibuild
-%pytest test
+%pytest --backend x11 %{?with_wayland:--backend wayland}
 
 
-%files -n qtile -f %{pyproject_files}
-%license LICENSE
+%files -f %{pyproject_files}
 %doc README.rst
 %{_bindir}/qtile
 %{_datadir}/xsessions/qtile.desktop
@@ -149,6 +154,16 @@ desktop-file-validate %{buildroot}%{_datadir}/wayland-sessions/%{name}-wayland.d
 
 
 %changelog
+* Sun Jan 01 2023 Jakub Kadlcik <frostyx@email.cz> - 0.22.1-4
+- Use Source0 from GitHub instead of PyPI
+- Remove Source1
+- Don't use _description macro
+- Use desktop-file-install instead of desktop-file-validate
+- Run tests with --backend wayland
+- Specify some dependencies missing from python3-cairocffi
+- Automatically generate wayland dependencies
+- Remove explicit license file
+
 * Wed Dec 21 2022 Jakub Kadlcik <frostyx@email.cz> - 0.22.1-3
 - Run desktop-file-validate in the check section
 
