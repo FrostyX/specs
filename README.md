@@ -5,6 +5,9 @@ https://www.redhat.com/sysadmin/create-rpm-package
 to understand the directory structure.
 
 
+Clone the repository
+
+
 ```
 git clone https://github.com/FrostyX/rpmbuild-topdir.git ~/rpmbuild/
 ```
