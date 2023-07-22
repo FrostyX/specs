@@ -1,5 +1,5 @@
 Name:           python-pywayland
-Version:        0.4.14
+Version:        0.4.15
 Release:        1%{?dist}
 Summary:        Python bindings for the libwayland library written in pure Python
 
@@ -50,6 +50,9 @@ Summary:        %{summary}
 
 
 %changelog
+* Sat Jul 22 2023 Jakub Kadlcik <frostyx@email.cz> - 0.4.15-1
+- New upstream version
+
 * Sun Jan 01 2023 Jakub Kadlcik <frostyx@email.cz> - 0.4.14-1
 - New upstream version
 
