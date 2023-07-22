@@ -1,6 +1,6 @@
 Name:           python-pywayland
 Version:        0.4.15
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Python bindings for the libwayland library written in pure Python
 
 License:        Apache2
@@ -39,7 +39,7 @@ Summary:        %{summary}
 
 %install
 %pyproject_install
-%pyproject_save_files '*' +auto
+%pyproject_save_files pywayland
 
 
 %check
@@ -47,9 +47,13 @@ Summary:        %{summary}
 
 
 %files -n python3-pywayland -f %{pyproject_files}
+%{_bindir}/pywayland-scanner
 
 
 %changelog
+* Sat Jul 22 2023 Jakub Kadlcik <frostyx@email.cz> - 0.4.15-2
+- Remove wildcard from pyproject_save_files
+
 * Sat Jul 22 2023 Jakub Kadlcik <frostyx@email.cz> - 0.4.15-1
 - New upstream version
 

@@ -1,6 +1,6 @@
 Name:           python-xkbcommon
 Version:        0.8
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Bindings for libxkbcommon using cffi
 
 License:        MIT
@@ -40,7 +40,7 @@ Summary:        %{summary}
 
 %install
 %pyproject_install
-%pyproject_save_files '*' +auto
+%pyproject_save_files xkbcommon
 
 
 %check
@@ -51,6 +51,9 @@ Summary:        %{summary}
 
 
 %changelog
+* Sat Jul 22 2023 Jakub Kadlcik <frostyx@email.cz> - 0.8-2
+- Remove wildcard from pyproject_save_files
+
 * Sat Jul 22 2023 Jakub Kadlcik <frostyx@email.cz> - 0.8-1
 - Update to a new upstream version
 
