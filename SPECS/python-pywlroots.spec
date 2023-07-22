@@ -1,6 +1,8 @@
 Name:           python-pywlroots
+# There is a newer version but I am packaging this as a dependency for Qtile
+# which requires pywlroots>=0.15.24,<0.16.0
 Version:        0.15.24
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Python binding to the wlroots library using cffi
 
 License:        MIT
@@ -10,12 +12,6 @@ Source:         %{pypi_source pywlroots}
 BuildRequires: python3-devel
 BuildRequires: gcc
 BuildRequires: wlroots-devel >= 0.15
-BuildRequires: python3-pywayland
-BuildRequires: python3-xkbcommon
-BuildRequires: python3-pip
-BuildRequires: python3-setuptools
-BuildRequires: python3-build
-BuildRequires: python3-wheel
 
 Requires:  wlroots
 
@@ -39,12 +35,7 @@ Summary:        %{summary}
 
 
 %generate_buildrequires
-
-# We cant use %%pyproject_buildrequires because of
-# https://bugzilla.redhat.com/show_bug.cgi?id=2097535
-# Until it's resolved, the following line needs to be commented-out and the
-# BuildRequires needs to be specified manually
-# %%pyproject_buildrequires
+%pyproject_buildrequires
 
 
 %build
@@ -66,6 +57,9 @@ python3 -m build --wheel --no-isolation
 
 
 %changelog
+* Sat Jul 22 2023 Jakub Kadlcik <frostyx@email.cz> - 0.15.24-2
+- We can use pyproject_buildrequires now, the RHBZ 2097535 is resolved
+
 * Tue Dec 20 2022 Jakub Kadlcik <frostyx@email.cz> - 0.15.24-1
 - New upstream version
 
