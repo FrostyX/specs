@@ -1,5 +1,5 @@
 Name:           python-xkbcommon
-Version:        0.4
+Version:        0.8
 Release:        1%{?dist}
 Summary:        Bindings for libxkbcommon using cffi
 
@@ -51,5 +51,8 @@ Summary:        %{summary}
 
 
 %changelog
+* Sat Jul 22 2023 Jakub Kadlcik <frostyx@email.cz> - 0.8-1
+- Update to a new upstream version
+
 * Tue Jun 14 2022 Jakub Kadlcik <frostyx@email.cz> - 0.4-1
 - Initial package
