@@ -1,6 +1,6 @@
 Name:           python-xkbcommon
 Version:        0.8
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Bindings for libxkbcommon using cffi
 
 License:        MIT
@@ -36,6 +36,7 @@ Summary:        %{summary}
 
 %build
 %pyproject_wheel
+%python3 xkbcommon/ffi_build.py
 
 
 %install
@@ -45,12 +46,20 @@ Summary:        %{summary}
 
 %check
 %pyproject_check_import -t
+%{py3_test_envvars} %{python3} -m unittest
 
 
 %files -n python3-xkbcommon -f %{pyproject_files}
+%license LICENSE
+%doc README.rst
 
 
 %changelog
+* Tue Jul 25 2023 Jakub Kadlcik <frostyx@email.cz> - 0.8-3
+- Run unit tests
+- Install license and doc files
+- Build _ffi.abi3.so
+
 * Sat Jul 22 2023 Jakub Kadlcik <frostyx@email.cz> - 0.8-2
 - Remove wildcard from pyproject_save_files
 
