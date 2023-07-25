@@ -16,6 +16,7 @@ License:        Apache-2.0 AND ISC AND NTP
 URL:            https://github.com/flacjacket/pywayland/
 Source:         %{pypi_source pywayland}
 
+BuildRequires:  wayland-devel
 BuildRequires:  wayland-protocols-devel
 BuildRequires:  gcc
 BuildRequires:  python3-devel
