@@ -2,7 +2,7 @@
 
 Name:           ansible-collection-pulp-pulp_installer
 Version:        3.22.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A collection of roles to install or upgrade Pulp 3
 
 License:        GPL-2.0-or-later
@@ -27,14 +27,6 @@ required by Pulp (PostgreSQL, Redis and a webserver.)}
 %description %_description
 
 
-%package doc
-Summary:        Documentation for the pulp.pulp_installer collection
-
-%description doc %_description
-
-This is a documentation for the pulp.pulp_installer collection.
-
-
 %prep
 %autosetup -p1 -n pulp_installer-%{version}
 
@@ -49,14 +41,13 @@ This is a documentation for the pulp.pulp_installer collection.
 
 %files -f %{ansible_collection_filelist}
 %license LICENSE COPYRIGHT COMMITMENT
-%doc README.md CHANGES
-
-
-%files doc
-%license LICENSE COPYRIGHT COMMITMENT
-%doc docs
+%doc README.md CHANGES docs
+%exclude %{ansible_collections_dir}/pulp/pulp_installer/docs/
 
 
 %changelog
+* Thu Jul 27 2023 Jakub Kadlcik <frostyx@email.cz> - 3.22.1-2
+- Remove the doc subpackage
+
 * Thu Jul 20 2023 Jakub Kadlcik <frostyx@email.cz> - 3.22.1-1
 - Initial package
