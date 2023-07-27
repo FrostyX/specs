@@ -1,8 +1,8 @@
 diff --git a/galaxy.yml b/galaxy.yml
-index 8085599..b03cc02 100644
+index 8085599..7815991 100644
 --- a/galaxy.yml
 +++ b/galaxy.yml
-@@ -90,3 +90,17 @@ build_ignore:
+@@ -90,3 +90,19 @@ build_ignore:
    - pulp-ci
    - vagrant
    - Vagrantfile
@@ -20,3 +20,5 @@ index 8085599..b03cc02 100644
 +  - .markdownlint.yml
 +  - .gitmodules
 +  - 'package*.json'
++  # Docs will be provided by a subpackage
++  - docs
