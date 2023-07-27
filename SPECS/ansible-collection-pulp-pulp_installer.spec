@@ -46,6 +46,10 @@ This is a documentation for the pulp.pulp_installer collection.
 %install
 %ansible_collection_install
 
+mkdir -p %{buildroot}%{_docdir}/%{name}-doc
+# Remove dangling symlinks
+cp -r --dereference docs %{buildroot}%{_docdir}/%{name}-doc
+
 
 %files -f %{ansible_collection_filelist}
 %license LICENSE COPYRIGHT COMMITMENT
@@ -54,7 +58,7 @@ This is a documentation for the pulp.pulp_installer collection.
 
 %files doc
 %license LICENSE COPYRIGHT COMMITMENT
-%doc docs
+%doc %{_docdir}/%{name}-doc
 
 
 %changelog
