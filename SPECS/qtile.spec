@@ -38,11 +38,15 @@ BuildRequires:  pango-devel
 BuildRequires:  gdk-pixbuf2-devel
 BuildRequires:  librsvg2-devel
 BuildRequires:  libxkbcommon-devel
-BuildRequires:  wlroots-devel
+BuildRequires:  wlroots0.15-devel
 BuildRequires:  gtk3-devel
 BuildRequires:  python3-pytest
 BuildRequires:  python3-bowler
 BuildRequires:  python3-gobject
+BuildRequires:  xorg-x11-server-Xwayland
+
+
+BuildRequires:  pulseaudio-libs-devel
 
 # Some dependencies are loaded with ffi.dlopen, and to declare them properly
 # we'll need this suffix.
@@ -64,6 +68,8 @@ Requires: libpangocairo-1.0.so.0%{libsymbolsuffix}
 BuildRequires: libgdk_pixbuf-2.0.so.0%{libsymbolsuffix}
 BuildRequires: libglib-2.0.so.0%{libsymbolsuffix}
 BuildRequires: libgdk-3.so.0%{libsymbolsuffix}
+
+BuildRequires: python3-xcffib
 
 # missing from python3-cairocffi
 Requires: libgdk_pixbuf-2.0.so.0%{libsymbolsuffix}
@@ -120,6 +126,7 @@ export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %build
 export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_wheel
+./scripts/ffibuild
 
 
 %install
@@ -140,7 +147,7 @@ desktop-file-install \
 
 
 %check
-./scripts/ffibuild
+# ./scripts/ffibuild
 %pytest --backend x11 %{?with_wayland:--backend wayland}
 
 
