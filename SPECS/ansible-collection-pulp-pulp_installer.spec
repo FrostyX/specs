@@ -2,7 +2,7 @@
 
 Name:           ansible-collection-pulp-pulp_installer
 Version:        3.22.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A collection of roles to install or upgrade Pulp 3
 
 License:        GPL-2.0-or-later
@@ -32,7 +32,7 @@ Summary:        Documentation for the pulp.pulp_installer collection
 
 %description doc %_description
 
-This is a documentation for the pulp.pulp_installer collection.
+This is documentation for the pulp.pulp_installer collection.
 
 
 %prep
@@ -48,7 +48,7 @@ This is a documentation for the pulp.pulp_installer collection.
 
 mkdir -p %{buildroot}%{_docdir}/%{name}-doc
 # Remove dangling symlinks
-cp -r --dereference docs %{buildroot}%{_docdir}/%{name}-doc
+cp -p -r --dereference docs %{buildroot}%{_docdir}/%{name}-doc
 
 
 %files -f %{ansible_collection_filelist}
@@ -62,5 +62,8 @@ cp -r --dereference docs %{buildroot}%{_docdir}/%{name}-doc
 
 
 %changelog
+* Fri Jul 28 2023 Jakub Kadlcik <frostyx@email.cz> - 3.22.1-2
+- Preserve timestamps and fix typo
+
 * Thu Jul 20 2023 Jakub Kadlcik <frostyx@email.cz> - 3.22.1-1
 - Initial package
