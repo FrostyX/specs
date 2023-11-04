@@ -2,7 +2,7 @@
 
 Name: qtile
 Version: 0.22.1
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: A pure-Python tiling window manager
 Source: https://github.com/qtile/qtile/archive/v%{version}/qtile-%{version}.tar.gz
 
@@ -11,11 +11,6 @@ Source: https://github.com/qtile/qtile/archive/v%{version}/qtile-%{version}.tar.
 #   libqtile/widget/cmus.py
 #   libqtile/widget/moc.py
 License: MIT AND GPL-3.0-or-later
-
-%if %{without wayland}
-BuildArch: noarch
-%endif
-
 Url: http://qtile.org
 
 BuildRequires:  python3-devel
@@ -43,10 +38,10 @@ BuildRequires:  gtk3-devel
 BuildRequires:  python3-pytest
 BuildRequires:  python3-bowler
 BuildRequires:  python3-gobject
-BuildRequires:  xorg-x11-server-Xwayland
-
-
 BuildRequires:  pulseaudio-libs-devel
+%if %{with wayland}
+BuildRequires:  xorg-x11-server-Xwayland
+%endif
 
 # Some dependencies are loaded with ffi.dlopen, and to declare them properly
 # we'll need this suffix.
@@ -161,6 +156,10 @@ desktop-file-install \
 
 
 %changelog
+* Sat Nov 04 2023 Jakub Kadlcik <frostyx@email.cz> - 0.22.1-5
+- Remove noarch
+- Only optional dependency on xorg-x11-server-Xwayland
+
 * Sun Jan 01 2023 Jakub Kadlcik <frostyx@email.cz> - 0.22.1-4
 - Use Source0 from GitHub instead of PyPI
 - Remove Source1
