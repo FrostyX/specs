@@ -1,8 +1,8 @@
 Name:           python-pywlroots
 # There is a newer version but I am packaging this as a dependency for Qtile
 # which requires pywlroots>=0.15.24,<0.16.0
-Version:        0.15.24
-Release:        4%{?dist}
+Version:        0.16.6
+Release:        1%{?dist}
 Summary:        Python binding to the wlroots library using cffi
 
 # The upstream mentions two different licenses, please see this issue
@@ -15,9 +15,9 @@ Source:         %{pypi_source pywlroots}
 BuildRequires: python3-devel
 BuildRequires: python3-pytest
 BuildRequires: gcc
-BuildRequires: wlroots0.15-devel
+BuildRequires: wlroots-devel
 
-Requires:  wlroots0.15
+Requires:  wlroots
 
 
 %global _description %{expand:
@@ -60,10 +60,12 @@ python3 wlroots/ffi_build.py
 %files -n python3-pywlroots -f %{pyproject_files}
 %license LICENSE
 %doc README.rst
-# %%exclude %{python3_sitearch}/wlroots/include/
 
 
 %changelog
+* Tue Oct 10 2023 Jakub Kadlcik <frostyx@email.cz> - 0.16.6-1
+- New upstream version
+
 * Tue Aug 08 2023 Jakub Kadlcik <frostyx@email.cz> - 0.15.24-4
 - rebuilt
 
