@@ -4,10 +4,7 @@ Name:           python-pywlroots
 Version:        0.16.6
 Release:        1%{?dist}
 Summary:        Python binding to the wlroots library using cffi
-
-# The upstream mentions two different licenses, please see this issue
-# https://github.com/flacjacket/pywlroots/issues/125
-License:        NCSA AND MIT
+License:        NCSA
 
 URL:            https://github.com/flacjacket/pywlroots
 Source:         %{pypi_source pywlroots}
@@ -66,8 +63,11 @@ python3 wlroots/ffi_build.py
 * Tue Oct 10 2023 Jakub Kadlcik <frostyx@email.cz> - 0.16.6-1
 - New upstream version
 
-* Tue Aug 08 2023 Jakub Kadlcik <frostyx@email.cz> - 0.15.24-4
-- rebuilt
+* Thu Sep 14 2023 Jakub Kadlcik <frostyx@email.cz> - 0.15.24-5
+- Don't exclude wlroots/include/ Qtile needs it
+
+* Thu Sep 14 2023 Jakub Kadlcik <frostyx@email.cz> - 0.15.24-4
+- The upstream issue #125 resolved, the license is only NCSA
 
 * Sun Jul 30 2023 Jakub Kadlcik <frostyx@email.cz> - 0.15.24-3
 - License breakdown
