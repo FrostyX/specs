@@ -81,10 +81,11 @@ Features
 
 %prep
 %autosetup -p 1
+
+
 %generate_buildrequires
 export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%pyproject_buildrequires %{?with_wayland:-x wayland}
-%pyproject_buildrequires -x test
+%pyproject_buildrequires -x test %{?with_wayland:-x wayland}
 
 
 %build
@@ -127,6 +128,7 @@ desktop-file-install \
 * Fri Nov 10 2023 Carl George <carlwgeorge@fedoraproject.org> - 0.23.0-3
 - Remove manual dependencies that duplicate generated ones
 - Remove temporary python3-cairocffi dependencies
+- Remove duplicate %%pyproject_buildrequires
 
 * Sat Nov 04 2023 Jakub Kadlcik <frostyx@email.cz> - 0.23.0-2
 - Remove noarch
