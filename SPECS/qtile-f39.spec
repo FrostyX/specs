@@ -2,7 +2,7 @@
 
 Name: qtile
 Version: 0.23.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: A pure-Python tiling window manager
 Source: https://github.com/qtile/qtile/archive/v%{version}/qtile-%{version}.tar.gz
 
@@ -22,9 +22,6 @@ BuildRequires:  xorg-x11-server-Xvfb
 BuildRequires:  xorg-x11-server-Xephyr
 BuildRequires:  rsvg-pixbuf-loader
 BuildRequires:  wlroots-devel
-%if %{with wayland}
-BuildRequires:  xorg-x11-server-Xwayland
-%endif
 
 # Some dependencies are loaded with ffi.dlopen, and to declare them properly
 # we'll need this suffix.
@@ -49,12 +46,7 @@ Recommends: python3-xmltodict
 Recommends: python3-dateutil
 Recommends: python3-mpd2
 
-%if %{with wayland}
-# Wayland-specific dependencies
-Recommends: python3-pywayland >= 0.4.14
-Recommends: python3-xkbcommon >= 0.3
-Recommends: python3-pywlroots >= 0.16.4
-%endif
+Requires: python3-libqtile = %{version}-%{release}
 
 
 %description
@@ -72,6 +64,30 @@ Features
       manipulate windows, update status bar widgets and more.
     * Qtile's remote scriptability makes it one of the most thoroughly
       unit-tested window mangers around.
+
+
+%package -n python3-libqtile
+Summary: Qtile's python library
+
+
+%description -n python3-libqtile
+%{summary}.
+
+
+%if %{with wayland}
+%package wayland
+Summary: Qtile wayland session
+BuildRequires: xorg-x11-server-Xwayland
+Requires: qtile = %{version}-%{release}
+Requires: python3-libqtile+wayland = %{version}-%{release}
+
+
+%description wayland
+%{summary}.
+
+
+%pyproject_extras_subpkg -n python3-libqtile wayland
+%endif
 
 
 %prep
@@ -110,16 +126,25 @@ desktop-file-install \
 %pytest -vv --backend x11 %{?with_wayland:--backend wayland}
 
 
-%files -f %{pyproject_files}
+%files
 %doc README.rst
 %{_bindir}/qtile
 %{_datadir}/xsessions/qtile.desktop
+
+
+%files -n python3-libqtile -f %{pyproject_files}
+
+
 %if %{with wayland}
+%files wayland
 %{_datadir}/wayland-sessions/qtile-wayland.desktop
 %endif
 
 
 %changelog
+* Fri Nov 10 2023 Carl George <carlwgeorge@fedoraproject.org> - 0.23.0-4
+- Add python3-libqtile, qtile-wayland, and python3-libqtile+wayland subpackages
+
 * Fri Nov 10 2023 Carl George <carlwgeorge@fedoraproject.org> - 0.23.0-3
 - Remove manual dependencies that duplicate generated ones
 - Remove temporary python3-cairocffi dependencies
