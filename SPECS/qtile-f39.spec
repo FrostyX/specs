@@ -14,7 +14,6 @@ License: MIT AND GPL-3.0-or-later
 Url: http://qtile.org
 
 BuildRequires:  python3-devel
-BuildRequires:  cairo
 BuildRequires:  desktop-file-utils
 
 # Test dependencies
@@ -47,19 +46,6 @@ BuildRequires: libpangocairo-1.0.so.0%{libsymbolsuffix}
 Requires: libgobject-2.0.so.0%{libsymbolsuffix}
 Requires: libpango-1.0.so.0%{libsymbolsuffix}
 Requires: libpangocairo-1.0.so.0%{libsymbolsuffix}
-
-# missing from python3-cairocffi
-BuildRequires: libgdk_pixbuf-2.0.so.0%{libsymbolsuffix}
-BuildRequires: libglib-2.0.so.0%{libsymbolsuffix}
-BuildRequires: libgdk-3.so.0%{libsymbolsuffix}
-
-# missing from python3-cairocffi
-Requires: libgdk_pixbuf-2.0.so.0%{libsymbolsuffix}
-Requires: libglib-2.0.so.0%{libsymbolsuffix}
-Requires: libgdk-3.so.0%{libsymbolsuffix}
-
-# python3-cairocffi is not currently pulling in cairo
-Requires:  cairo
 
 # Recommended packages for widgets
 Recommends: python3-psutil
@@ -140,6 +126,7 @@ desktop-file-install \
 %changelog
 * Fri Nov 10 2023 Carl George <carlwgeorge@fedoraproject.org> - 0.23.0-3
 - Remove manual dependencies that duplicate generated ones
+- Remove temporary python3-cairocffi dependencies
 
 * Sat Nov 04 2023 Jakub Kadlcik <frostyx@email.cz> - 0.23.0-2
 - Remove noarch
