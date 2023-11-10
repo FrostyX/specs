@@ -51,8 +51,9 @@ Recommends: python3-mpd2
 
 %if %{with wayland}
 # Wayland-specific dependencies
-Recommends: python3-pywayland
-Recommends: python3-pywlroots >= 0.16
+Recommends: python3-pywayland >= 0.4.14
+Recommends: python3-xkbcommon >= 0.3
+Recommends: python3-pywlroots >= 0.16.4
 %endif
 
 
@@ -125,6 +126,7 @@ desktop-file-install \
 - Remove duplicate %%pyproject_buildrequires
 - Buildrequire rsvg-pixbuf-loader for SVG image loading during the test suite
 - Remove unnecessary buildrequires
+- Correct wayland recommends
 
 * Sat Nov 04 2023 Jakub Kadlcik <frostyx@email.cz> - 0.23.0-2
 - Remove noarch
