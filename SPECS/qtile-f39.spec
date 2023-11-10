@@ -2,7 +2,7 @@
 
 Name: qtile
 Version: 0.23.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: A pure-Python tiling window manager
 Source: https://github.com/qtile/qtile/archive/v%{version}/qtile-%{version}.tar.gz
 
@@ -14,15 +14,7 @@ License: MIT AND GPL-3.0-or-later
 Url: http://qtile.org
 
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-cffi
-BuildRequires:  python3-xcffib >= 1.4.0
-BuildRequires:  python3-cairocffi >= 1.6.0
 BuildRequires:  cairo
-BuildRequires:  python3-six
-BuildRequires:  python3-pycparser
-BuildRequires:  python3-setuptools_scm
-BuildRequires:  python3-dbus-next
 BuildRequires:  desktop-file-utils
 
 # Test dependencies
@@ -35,9 +27,6 @@ BuildRequires:  librsvg2-devel
 BuildRequires:  libxkbcommon-devel
 BuildRequires:  wlroots-devel
 BuildRequires:  gtk3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  python3-bowler
-BuildRequires:  python3-gobject
 BuildRequires:  pulseaudio-libs-devel
 %if %{with wayland}
 BuildRequires:  xorg-x11-server-Xwayland
@@ -64,17 +53,11 @@ BuildRequires: libgdk_pixbuf-2.0.so.0%{libsymbolsuffix}
 BuildRequires: libglib-2.0.so.0%{libsymbolsuffix}
 BuildRequires: libgdk-3.so.0%{libsymbolsuffix}
 
-BuildRequires: python3-xcffib
-
 # missing from python3-cairocffi
 Requires: libgdk_pixbuf-2.0.so.0%{libsymbolsuffix}
 Requires: libglib-2.0.so.0%{libsymbolsuffix}
 Requires: libgdk-3.so.0%{libsymbolsuffix}
 
-Requires:  python3-cairocffi
-Requires:  python3-cffi
-Requires:  python3-xcffib
-Requires:  python3-dbus-next
 # python3-cairocffi is not currently pulling in cairo
 Requires:  cairo
 
@@ -155,6 +138,9 @@ desktop-file-install \
 
 
 %changelog
+* Fri Nov 10 2023 Carl George <carlwgeorge@fedoraproject.org> - 0.23.0-3
+- Remove manual dependencies that duplicate generated ones
+
 * Sat Nov 04 2023 Jakub Kadlcik <frostyx@email.cz> - 0.23.0-2
 - Remove noarch
 - Only optional dependency on xorg-x11-server-Xwayland
