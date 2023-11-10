@@ -21,11 +21,7 @@ BuildRequires:  gcc
 BuildRequires:  xorg-x11-server-Xvfb
 BuildRequires:  xorg-x11-server-Xephyr
 BuildRequires:  rsvg-pixbuf-loader
-BuildRequires:  pango-devel
-BuildRequires:  libxkbcommon-devel
 BuildRequires:  wlroots-devel
-BuildRequires:  gtk3-devel
-BuildRequires:  pulseaudio-libs-devel
 %if %{with wayland}
 BuildRequires:  xorg-x11-server-Xwayland
 %endif
@@ -38,7 +34,6 @@ BuildRequires:  xorg-x11-server-Xwayland
 %global libsymbolsuffix ()(%{__isa_bits}bit)
 %endif
 
-BuildRequires:  pango-devel
 BuildRequires: libgobject-2.0.so.0%{libsymbolsuffix}
 BuildRequires: libpango-1.0.so.0%{libsymbolsuffix}
 BuildRequires: libpangocairo-1.0.so.0%{libsymbolsuffix}
@@ -129,6 +124,7 @@ desktop-file-install \
 - Remove temporary python3-cairocffi dependencies
 - Remove duplicate %%pyproject_buildrequires
 - Buildrequire rsvg-pixbuf-loader for SVG image loading during the test suite
+- Remove unnecessary buildrequires
 
 * Sat Nov 04 2023 Jakub Kadlcik <frostyx@email.cz> - 0.23.0-2
 - Remove noarch
