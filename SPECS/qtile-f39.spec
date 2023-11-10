@@ -20,9 +20,8 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  xorg-x11-server-Xvfb
 BuildRequires:  xorg-x11-server-Xephyr
+BuildRequires:  rsvg-pixbuf-loader
 BuildRequires:  pango-devel
-BuildRequires:  gdk-pixbuf2-devel
-BuildRequires:  librsvg2-devel
 BuildRequires:  libxkbcommon-devel
 BuildRequires:  wlroots-devel
 BuildRequires:  gtk3-devel
@@ -129,6 +128,7 @@ desktop-file-install \
 - Remove manual dependencies that duplicate generated ones
 - Remove temporary python3-cairocffi dependencies
 - Remove duplicate %%pyproject_buildrequires
+- Buildrequire rsvg-pixbuf-loader for SVG image loading during the test suite
 
 * Sat Nov 04 2023 Jakub Kadlcik <frostyx@email.cz> - 0.23.0-2
 - Remove noarch
