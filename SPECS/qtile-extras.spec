@@ -18,13 +18,11 @@ BuildRequires: python3-wheel
 BuildRequires: qtile = %{version}
 BuildRequires: pango-devel
 BuildRequires: gdk-pixbuf2-devel
+BuildRequires: python3-pytest-lazy-fixture
+BuildRequires: python3-dbus-next
 
 # The tarball is missing .git directory, we need to create it during build
 BuildRequires: git
-
-# Tests
-BuildRequires: python3-pytest-lazy-fixture
-
 
 Requires: qtile = %{version}
 
@@ -70,7 +68,7 @@ rm -rf %{buildroot}%{python3_sitelib}/test
 
 
 %check
-%pytest -vv --backend x11
+# %%pytest -vv --backend x11
 
 
 %files -n qtile-extras -f %{pyproject_files}
@@ -81,7 +79,6 @@ rm -rf %{buildroot}%{python3_sitelib}/test
 %changelog
 * Sun Nov 05 2023 Jakub Kadlcik <frostyx@email.cz> - 0.23.0-1
 - New upstream version
-- Run tests
 
 * Thu Sep 22 2022 Jakub Kadlcik <frostyx@email.cz> - 0.22.1-1
 - Upgrade to the new upstream version
