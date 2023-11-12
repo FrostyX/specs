@@ -1,5 +1,5 @@
 Name: qtile-extras
-Version: 0.22.1
+Version: 0.23.0
 Release: 1%{?dist}
 Summary: A collection of mods for Qtile.
 
@@ -18,10 +18,12 @@ BuildRequires: python3-wheel
 BuildRequires: qtile = %{version}
 BuildRequires: pango-devel
 BuildRequires: gdk-pixbuf2-devel
-BuildRequires: /usr/bin/pathfix.py
 
 # The tarball is missing .git directory, we need to create it during build
 BuildRequires: git
+
+# Tests
+BuildRequires: python3-pytest-lazy-fixture
 
 
 Requires: qtile = %{version}
@@ -35,11 +37,14 @@ For more, please read
 https://qtile-extras.readthedocs.io/
 
 
+%generate_buildrequires
+%pyproject_buildrequires
+
+
 %prep
 %autosetup -n %{name}-%{version}
 git init
-
-pathfix.py -pni "%{__python3} %{py3_shbang_opts}" .
+%py3_shebang_fix .
 
 # The stravalib isn't packaged for Fedora yet
 # https://pypi.org/project/stravalib/
@@ -64,12 +69,20 @@ rm -rf test/widget/test_network.py
 rm -rf %{buildroot}%{python3_sitelib}/test
 
 
+%check
+%pytest -vv --backend x11
+
+
 %files -n qtile-extras -f %{pyproject_files}
 %license LICENSE
 %doc README.md
 
 
 %changelog
+* Sun Nov 05 2023 Jakub Kadlcik <frostyx@email.cz> - 0.23.0-1
+- New upstream version
+- Run tests
+
 * Thu Sep 22 2022 Jakub Kadlcik <frostyx@email.cz> - 0.22.1-1
 - Upgrade to the new upstream version
 
