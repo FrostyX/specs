@@ -123,6 +123,9 @@ desktop-file-install \
 
 
 %check
+# The tests can sometimes randomly fail. Rebuilding the package again usually
+# solves the issue. Please see the upstream issue:
+# https://github.com/qtile/qtile/issues/4573
 %pytest -vv --backend x11 %{?with_wayland:--backend wayland}
 
 
