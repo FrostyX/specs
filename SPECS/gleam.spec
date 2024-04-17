@@ -1,16 +1,24 @@
-%global debug_package %{nil}
+# The `deno` tool is not packaged in Fedora so we are not running
+# the tests for now
+%bcond_without check
 
 Name: gleam
-Version: 1.0.0
-Release: 1%{?dist}
+Version: 1.1.0
+Release: %autorelease
 Summary: A friendly language for building type-safe, scalable systems!
+
+# TODO
+# SourceLicense:
 
 License: Apache-2.0
 URL: https://github.com/gleam-lang/gleam
 Source: %{URL}/archive/v%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires: cargo
+BuildRequires: cargo-rpm-macros >= 24
+# BuildRequires: cargo
+%if %{with check}
 BuildRequires: clippy
+%endif
 Requires: erlang
 
 
@@ -23,31 +31,41 @@ that run on Erlang’s virtual machine BEAM, Erlang and Elixir.
 
 %prep
 %autosetup
+%cargo_prep
+
+%generate_buildrequires
+%cargo_generate_buildrequires
 
 
 %build
-%make_build
+%cargo_build
+%{cargo_license_summary}
+%{cargo_license} > LICENSE.dependencies
 
 
 %install
-%make_install
-mkdir -p %{buildroot}/%{_bindir}/
-cp -a target/release/%{name} %{buildroot}/%{_bindir}/
+%cargo_install
+# mkdir -p %{buildroot}/%{_bindir}/
+# cp -a target/release/%{name} %{buildroot}/%{_bindir}/
 
 
+%if %{with check}
 %check
-# The `deno` tool is not packaged in Fedora so we are not running
-# the tests for now
-# make test
+%cargo_test
+%endif
 
 
 %files
 %license LICENCE
-%doc README.md
+%license compiler-cli/LICENCE
+%license compiler-core/LICENCE
+%license compiler-wasm/LICENCE
+%license test-package-compiler/LICENCE
+%license LICENSE.dependencies
 %doc CHANGELOG.md
-%{_bindir}/%{name}
+%doc README.md
+%{_bindir}/gleam
 
 
 %changelog
-* Sat Apr 13 2024 Jakub Kadlcik <frostyx@email.cz> 1.0.0-1
-- Initial package
+%autochangelog
