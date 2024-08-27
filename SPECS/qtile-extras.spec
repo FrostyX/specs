@@ -1,5 +1,5 @@
 Name: qtile-extras
-Version: 0.26.0
+Version: 0.28.1
 Release: 1%{?dist}
 Summary: A collection of mods for Qtile.
 
@@ -77,6 +77,12 @@ rm -rf %{buildroot}%{python3_sitelib}/test
 
 
 %changelog
+* Wed Aug 21 2024 Jakub Kadlcik <frostyx@email.cz> - 0.28.1-1
+- New upstream version
+
+* Sat Jul 13 2024 Jakub Kadlcik <frostyx@email.cz> - 0.27.0-1
+- New upstream version
+
 * Thu May 23 2024 Jakub Kadlcik <frostyx@email.cz> - 0.26.0-1
 - New upstream version
 
