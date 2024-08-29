@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name: gickup
-Version: 0.10.32
+Version: 0.10.33
 Release: 1%{?dist}
 Summary: Mirror repositories from one git forge to another
 
@@ -43,6 +43,9 @@ go test
 
 
 %changelog
+* Thu Aug 29 2024 Jakub Kadlcik <frostyx@email.cz> - 0.10.33-1
+- New upstream version
+
 * Tue Aug 27 2024 Jakub Kadlcik <frostyx@email.cz> - 0.10.32-1
 - New upstream version
 
