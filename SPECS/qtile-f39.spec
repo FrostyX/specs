@@ -1,8 +1,6 @@
-%bcond_with wayland
-
 Name: qtile
 Version: 0.23.0
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: A pure-Python tiling window manager
 Source: https://github.com/qtile/qtile/archive/v%{version}/qtile-%{version}.tar.gz
 
@@ -74,7 +72,6 @@ Summary: Qtile's python library
 %{summary}.
 
 
-%if %{with wayland}
 %package wayland
 Summary: Qtile wayland session
 BuildRequires: xorg-x11-server-Xwayland
@@ -87,7 +84,6 @@ Requires: python3-libqtile+wayland = %{version}-%{release}
 
 
 %pyproject_extras_subpkg -n python3-libqtile wayland
-%endif
 
 
 %prep
@@ -96,13 +92,13 @@ Requires: python3-libqtile+wayland = %{version}-%{release}
 
 %generate_buildrequires
 export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%pyproject_buildrequires -x test %{?with_wayland:-x wayland}
+%pyproject_buildrequires -x test,wayland
 
 
 %build
 export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_wheel
-./scripts/ffibuild
+PYTHONPATH=${PWD} ./scripts/ffibuild
 
 
 %install
@@ -114,19 +110,17 @@ desktop-file-install \
     --dir %{buildroot}%{_datadir}/xsessions/ \
     resources/qtile.desktop
 
-%if %{with wayland}
 mkdir -p %{buildroot}%{_datadir}/wayland-sessions/
 desktop-file-install \
     --dir %{buildroot}%{_datadir}/wayland-sessions/ \
     resources/qtile-wayland.desktop
-%endif
 
 
 %check
 # The tests can sometimes randomly fail. Rebuilding the package again usually
 # solves the issue. Please see the upstream issue:
 # https://github.com/qtile/qtile/issues/4573
-%pytest -vv --backend x11 %{?with_wayland:--backend wayland}
+%pytest -vv --backend x11 --backend wayland
 
 
 %files
@@ -138,13 +132,14 @@ desktop-file-install \
 %files -n python3-libqtile -f %{pyproject_files}
 
 
-%if %{with wayland}
 %files wayland
 %{_datadir}/wayland-sessions/qtile-wayland.desktop
-%endif
 
 
 %changelog
+* Mon Nov 13 2023 Carl George <carlwgeorge@fedoraproject.org> - 0.23.0-5
+- Fix ffibuild to enable wayland subpackages
+
 * Fri Nov 10 2023 Carl George <carlwgeorge@fedoraproject.org> - 0.23.0-4
 - Add python3-libqtile, qtile-wayland, and python3-libqtile+wayland subpackages
 
