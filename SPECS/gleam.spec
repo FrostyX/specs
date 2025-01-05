@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name: gleam
-Version: 1.6.3
+Version: 1.7.0
 Release: 1%{?dist}
 Summary: A friendly language for building type-safe, scalable systems!
 
@@ -49,6 +49,9 @@ cp -a target/release/%{name} %{buildroot}/%{_bindir}/
 
 
 %changelog
+* Sun Jan 05 2025 Jakub Kadlcik <frostyx@email.cz> - 1.7.0-1
+- New upstream version
+
 * Tue Dec 03 2024 Jakub Kadlcik <frostyx@email.cz> - 1.6.3-1
 - New upstream version
 
